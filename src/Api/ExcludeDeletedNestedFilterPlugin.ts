@@ -4,7 +4,9 @@
  * @Copyright: Technology Studio
 **/
 
-import { Plugin, PluginOptions, ResolverArguments } from '@txo-peer-dep/nested-filter-prisma'
+import {
+  type Plugin, type PluginOptions, type ResolverArguments,
+} from '@txo-peer-dep/nested-filter-prisma'
 
 type Options = {
   deletedDateTimeValue?: string | null,
@@ -47,7 +49,7 @@ export class ExcludeDeletedNestedFilterPlugin implements Plugin {
   )
 
   _injectDeleted = (value: unknown, deletedDateTimeValue?: string | null): unknown => {
-    if (value && Array.isArray(value)) {
+    if (value != null && Array.isArray(value)) {
       let modified = false
       const nextValue = value.map(subValue => {
         const nextSubValue = this._injectDeleted(subValue, deletedDateTimeValue)
@@ -58,7 +60,7 @@ export class ExcludeDeletedNestedFilterPlugin implements Plugin {
       })
       return modified ? nextValue : value
     }
-    if (value && typeof value === 'object') {
+    if (value != null && typeof value === 'object') {
       let nonEntity = false
       const nextValue = Object.keys(value).reduce(
         (nextValue: Record<string, unknown>, key) => {
@@ -77,12 +79,12 @@ export class ExcludeDeletedNestedFilterPlugin implements Plugin {
     return value
   }
 
-  processWhere <WHERE > (
+  processWhere<WHERE>(
     where: WHERE,
     resolverArguments: ResolverArguments,
     pluginOptions?: PluginOptions,
   ): WHERE {
-    if (pluginOptions?.excludeDeleted ?? this._defaultOptions?.excludeDeleted) {
+    if ((pluginOptions?.excludeDeleted ?? this._defaultOptions?.excludeDeleted) ?? false) {
       const deletedDateTimeValue = (
         pluginOptions?.deletedDateTimeValue !== undefined
           ? pluginOptions?.deletedDateTimeValue

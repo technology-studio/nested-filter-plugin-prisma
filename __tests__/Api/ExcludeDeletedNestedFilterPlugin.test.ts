@@ -4,7 +4,8 @@
  * @Copyright: Technology Studio
 **/
 
-import { ResolverArguments } from '@txo-peer-dep/nested-filter-prisma'
+import { type ResolverArguments } from '@txo-peer-dep/nested-filter-prisma'
+
 import { ExcludeDeletedNestedFilterPlugin } from '@txo/nested-filter-plugin-prisma'
 
 describe('ExcludeDeletedNenstedFilterPlugin', () => {
